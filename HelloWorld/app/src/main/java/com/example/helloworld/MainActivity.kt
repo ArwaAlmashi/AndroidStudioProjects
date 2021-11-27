@@ -13,7 +13,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-     mainId = findViewById(R.id.mainID)
+        mainId = findViewById(R.id.mainID)
+        var messages = arrayListOf<String>()
+
+        alertButton.setOnClickListener {
+            Log.d("MAIN", messages.toString())
+            customAlert()
+        }
+
 
 
     }
