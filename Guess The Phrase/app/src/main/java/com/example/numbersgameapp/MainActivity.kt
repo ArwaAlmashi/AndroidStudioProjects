@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = textRecycleView
         var randomNumber: Int = Random.nextInt(11)
 
+        textList.add(MyText("Random =  ${randomNumber}"))
+        textRecycleView.setText(textList)
 
         sendButton.setOnClickListener {
 
