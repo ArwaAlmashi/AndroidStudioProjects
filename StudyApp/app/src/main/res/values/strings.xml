@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Study App</string>
+    <string name="hi">Hi</string>
+    <string name="second">second</string>
 </resources>
