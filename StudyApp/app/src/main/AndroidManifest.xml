@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyApp">
         <activity
-            android:name=".AndroidActivity"
+            android:name=".androidcontent.AndroidActivity"
             android:exported="false" />
         <activity
-            android:name=".KotlinActivity"
+            android:name=".kotlincontent.KotlinActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,6 +1,8 @@
 package com.example.guessthephraseupdated
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -15,6 +17,7 @@ lateinit var recyclerView : RecyclerView
 lateinit var editText: EditText
 lateinit var sendButton: Button
 lateinit var currentPhrase : TextView
+private lateinit var sharedPreferences: SharedPreferences
 
 var statementList : ArrayList<Statement> = ArrayList()
 val recyclerViewAdapter : RecyclerViewAdapter by lazy { RecyclerViewAdapter() }
@@ -84,6 +87,15 @@ class MainActivity : AppCompatActivity() {
             recyclerViewAdapter.setStatement(statementList)
 
         }
+        sharedPreferences = this.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        var myMessage =
+            sharedPreferences.getString("myMessage", "")
+                .toString()
+        with(sharedPreferences.edit()) {
+            putString("myMessage", myMessage)
+            apply()
+        }
 
     }
 
@@ -116,6 +128,8 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("Yes"){dialogInterface, which ->
             statementList.removeAll(statementList)
             recyclerViewAdapter.setStatement(statementList)
+            chance = 0
+            switcher = 0
         }
         //performing cancel action
         builder.setNeutralButton("Cancel"){dialogInterface , which ->
