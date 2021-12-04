@@ -24,5 +24,12 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Toast", Toast.LENGTH_LONG).show()
         }
 
+        val number = readLine()
+        when{
+            number!!.length < 3 -> println("Short")
+            number!!.length > 8 -> println("Long")
+            else -> println("Medium")
+        }
+
     }
 }
