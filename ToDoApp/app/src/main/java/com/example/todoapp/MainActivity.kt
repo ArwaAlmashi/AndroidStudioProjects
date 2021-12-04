@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.deleteButton -> {
-                Toast.makeText(this, "delete", Toast.LENGTH_LONG).show()
                 toDoList.removeAll(toDoList)
                 val rv : RecyclerView = findViewById(R.id.toDoRecyclerView)
                 rv.adapter = ToDoAdapter(toDoList)
