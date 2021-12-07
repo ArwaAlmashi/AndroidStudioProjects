@@ -1,21 +1,13 @@
 package com.example.coroutinesapp
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.example.coroutinesapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONArray
+import retrofit2.Call
+import retrofit2.Response
 import java.lang.Exception
-import java.net.URI
-import java.net.URL
+import retrofit2.Callback
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,52 +22,28 @@ class MainActivity : AppCompatActivity() {
         cars = arrayListOf()
         binding.myRecyclerView.adapter = RVAdapter(cars)
 
-        requestAPI()
+        // Retrofit API
+        val apiInterface = APIClient().getClient()?.create(APIInterface::class.java)
 
-    }
-
-    private fun requestAPI() {
-        CoroutineScope(IO).launch {
-            val data = async{ fetchData() }.await()
-            if (data.isNotEmpty()) {
-                populateRV(data)
-            } else {
-                Toast.makeText(this@MainActivity, "Noy found data", Toast.LENGTH_LONG)
+        apiInterface?.getCars()?.enqueue(object : Callback<Cars> {
+            override fun onResponse(call: Call<Cars>, response: Response<Cars>) {
+                try {
+                    cars.add(response.body()!![0].model)
+                    binding.myRecyclerView.adapter?.notifyDataSetChanged()
+                    Log.d("MainActivity", "MAKE: ${response.body()!![0].make}")
+                    Log.d("MainActivity", "MODEL: ${response.body()!![0].model}")
+                    Log.d("MainActivity", "YEAR: ${response.body()!![0].year}")
+                    Log.d("MainActivity", "OWNERS: ${response.body()!![0].owners}")
+                } catch (ex: Exception) {
+                    Log.d("MainActivity", "Error: ${ex.message}")
+                }
             }
-        }
-    }
 
-    private fun fetchData(): String {
-        var response = ""
-        try {
-            response =
-                URL("https://raw.githubusercontent.com/AlminPiricDojo/JSON_files/main/cars.json").readText()
-        } catch (ex: Exception) {
-            Toast.makeText(this, "Error: ${ex.message}", Toast.LENGTH_LONG).show()
-
-        }
-        return response
-    }
-
-
-    private suspend fun populateRV(result: String){
-        withContext(Main){
-
-            val jsonArray = JSONArray(result)
-
-            val make = jsonArray.getJSONObject(0).getString("make")
-            val model = jsonArray.getJSONObject(0).getString("model")
-            val year = jsonArray.getJSONObject(0).getString("year")
-            Log.d("MainActivity", make)
-            Log.d("MainActivity", model)
-            Log.d("MainActivity", year)
-
-            val ownerJsonArray = jsonArray.getJSONObject(0).getJSONArray("owners")
-            for (i in 0 until ownerJsonArray.length()) {
-                Log.d("MainActivity", "${ownerJsonArray[i]}")
+            override fun onFailure(call: Call<Cars>, t: Throwable) {
+                Log.d("MainActivity", "Enable to get data")
             }
-            cars.add(make)
-            binding.myRecyclerView.adapter?.notifyDataSetChanged()
-        }
+
+        })
+
     }
 }
