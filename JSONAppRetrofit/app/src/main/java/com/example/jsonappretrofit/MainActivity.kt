@@ -15,9 +15,8 @@ import android.widget.ArrayAdapter
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    lateinit var eurData: Eur
 
-    val currencyList: List<String> = listOf("ada", "aed", "all", "vef", "scr")
+    private val currencyList: List<String> = listOf("ada", "aed", "all", "vef", "scr")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
