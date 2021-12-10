@@ -45,6 +45,10 @@ class ToDoAdapter(private var toDoList: ArrayList<ToDo>) :
             notifyDataSetChanged()
         }
 
+        holder.binding.toDoContainer.setOnClickListener {
+            Log.d("toDo" ,"${toDoList[position].text}")
+        }
+
     }
 
     override fun getItemCount(): Int = toDoList.size
